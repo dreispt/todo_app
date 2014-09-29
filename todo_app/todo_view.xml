@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<openerp>
+  <data>
+
+    <!-- Action to open To-Do Task list -->
+    <act_window id="action_todo_task"
+      name="To-do Task"
+      res_model="todo.task"
+      view_mode="tree,form" />
+
+    <!-- Menu Item to open To-Do Task list -->
+    <menuitem id="menu_todo_task"
+      name="To-Do Tasks"
+      parent="mail.mail_feeds"
+      sequence="20"
+      action="action_todo_task" />
+
+  </data>
+</openerp>
