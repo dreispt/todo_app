@@ -6,5 +6,6 @@
     'application': True,
     'data': [
         'todo_view.xml',
+        'security/ir.model.access.csv',
     ]
 }
