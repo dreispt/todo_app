@@ -15,5 +15,42 @@
       sequence="20"
       action="action_todo_task" />
 
+    <record id="view_form_todo_task" model="ir.ui.view">
+      <field name="name">To-do Task Form</field>
+      <field name="model">todo.task</field>
+      <field name="arch" type="xml">
+        <form string="To-do task...">
+          <group>
+            <field name="name"/>
+            <field name="is_done"/>
+            <field name="active"/>
+          </group>
+        </form>
+      </field>
+    </record>
+
+    <record id="view_tree_todo_task" model="ir.ui.view">
+      <field name="name">To-do Task Tree</field>
+      <field name="model">todo.task</field>
+      <field name="arch" type="xml">
+        <tree string="To-do task..." colors="gray:is_done==True">
+          <field name="name"/>
+          <field name="is_done"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="view_filter_todo_task" model="ir.ui.view">
+      <field name="name">To-do Task Filter</field>
+      <field name="model">todo.task</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="name"/>
+          <filter string="Not Done" domain="[('is_done','=',False)]"/>
+          <filter string="Done" domain="[('is_done','!=',False)]"/>
+        </search>
+      </field>
+    </record>
+
   </data>
 </openerp>
