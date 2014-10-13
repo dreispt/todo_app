@@ -1,0 +1,51 @@
+<openerp>
+  <data>
+
+    <!-- Extend form -->
+    <record id="view_form_todo_task_inherited" model="ir.ui.view">
+      <field name="name">view_form_todo_task_inherited</field>
+      <field name="model">todo.task</field>
+      <field name="inherit_id" ref="todo_app.view_form_todo_task"/>
+      <field name="arch" type="xml">
+
+        <field name="name" position="after">
+          <field name="user_id" />
+        </field>
+        <field name="is_done" position="before">
+          <field name="date_deadline" />
+        </field>
+        <field name="active" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </field>
+
+      </field>
+    </record>
+
+    <!-- Extend list -->
+    <record id="view_tree_todo_task_inherited" model="ir.ui.view">
+      <field name="name">view_tree_todo_task_inherited</field>
+      <field name="model">todo.task</field>
+      <field name="inherit_id" ref="todo_app.view_tree_todo_task"/>
+      <field name="arch" type="xml">
+        <field name="name" position="after">
+          <field name="user_id" />
+        </field>
+      </field>
+    </record>
+
+    <!-- Extend search -->
+    <record id="view_filter_todo_task_inherited" model="ir.ui.view">
+      <field name="name">view_filter_todo_task_inherited</field>
+      <field name="model">todo.task</field>
+      <field name="inherit_id" ref="todo_app.view_filter_todo_task"/>
+      <field name="arch" type="xml">
+        <field name="name" position="after">
+          <field name="user_id" />
+          <filter string="Not Assigned"
+              domain="[('user_id','=',False)]" />
+        </field>
+      </field>
+    </record>
+
+  </data>
+</openerp>
