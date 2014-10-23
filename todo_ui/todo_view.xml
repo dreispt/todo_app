@@ -1,0 +1,48 @@
+<openerp>
+  <data>
+
+    <!-- Stages form -->
+    <record id="view_form_todo_stage" model="ir.ui.view">
+      <field name="name">view_form_todo_stage</field>
+      <field name="model">todo.stage</field>
+      <field name="arch" type="xml">
+        <form>
+          <field name="name" />
+          <field name="fold" />
+          <field name="desc" />
+          <field name="sequence" />
+          <field name="perc_complete" />
+        </form>
+      </field>
+    </record>
+
+  <!-- Tags form -->
+    <record id="view_form_todo_tag" model="ir.ui.view">
+      <field name="name">view_form_todo_tag</field>
+      <field name="model">todo.tag</field>
+      <field name="arch" type="xml">
+        <form>
+          <field name="name" />
+        </form>
+      </field>
+    </record>
+
+
+    <!-- Extend form -->
+    <record id="view_form_todo_task_inherited" model="ir.ui.view">
+      <field name="name">view_form_todo_task_inherited</field>
+      <field name="model">todo.task</field>
+      <field name="inherit_id" ref="todo_app.view_form_todo_task"/>
+      <field name="arch" type="xml">
+
+        <field name="name" position="after">
+          <field name="stage" />
+          <field name="state" />
+          <field name="refers_to" />
+        </field>
+      </field>
+
+    </record>
+
+  </data>
+</openerp>
