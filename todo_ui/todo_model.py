@@ -37,9 +37,12 @@ class Stage(models.Model):
 
 class Tags(models.Model):
     _name = 'todo.tag'
+    _rec_name = 'name'
+    _order = 'name'
+
     name = fields.Char('Name', size=30, translate=True)
     #tasks0 = fields.Many2many('')
-    #tags = fields.Many2many('todo.tag', string='Tags')
+    tasks = fields.Many2many('todo.task', string='Tasks')
 
 
 class TodoTask(models.Model):
@@ -49,12 +52,11 @@ class TodoTask(models.Model):
     stage = fields.Many2one('todo.stage', 'Stage')
     tags = fields.Many2many('todo.tag', string='Tags')
 
-    #state = fields.related(
-    #    'stage', 'state',
-    #    type='char',
-    #    string='State',
-    #    store=True
-    #)
+    state = fields.Selection(
+        string='Stage State',
+        related='stage.state',
+        store=True,
+    )
 
     refers_to = fields.Reference(
         [('res.user', 'User'), ('res.partner', 'Partner')],

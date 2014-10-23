@@ -7,11 +7,14 @@
       <field name="model">todo.stage</field>
       <field name="arch" type="xml">
         <form>
-          <field name="name" />
-          <field name="fold" />
-          <field name="desc" />
-          <field name="sequence" />
-          <field name="perc_complete" />
+          <group>
+            <field name="name" />
+            <field name="state" />
+            <field name="fold" />
+            <field name="desc" />
+            <field name="sequence" />
+            <field name="perc_complete" />
+          </group>
         </form>
       </field>
     </record>
@@ -22,7 +25,10 @@
       <field name="model">todo.tag</field>
       <field name="arch" type="xml">
         <form>
-          <field name="name" />
+          <group>
+            <field name="name" />
+            <field name="tasks" />
+          </group>
         </form>
       </field>
     </record>
@@ -39,6 +45,7 @@
           <field name="stage" />
           <field name="state" />
           <field name="refers_to" />
+          <field name="tags" />
         </field>
       </field>
 
