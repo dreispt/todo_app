@@ -5,6 +5,6 @@
     'depends': ['todo_app'],
     'data': [
         'todo_view.xml',
-    #    'security/ir.model.access.csv',
+        # 'security/ir.model.access.csv',
     ],
 }
