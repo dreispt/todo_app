@@ -22,7 +22,7 @@
   <!-- Tags form -->
     <record id="view_form_todo_tag" model="ir.ui.view">
       <field name="name">view_form_todo_tag</field>
-      <field name="model">todo.tag</field>
+      <field name="model">todo.task.tag</field>
       <field name="arch" type="xml">
         <form>
           <group>
@@ -50,6 +50,18 @@
       </field>
 
     </record>
+    <!--
+    <record id="view_form_todo_task_inherited2" model="ir.ui.view">
+      <field name="name">view_form_todo_task_inherited2</field>
+      <field name="model">todo.task</field>
+      <field name="inherit_id" ref="todo_user.view_form_todo_task_inherited"/>
+      <field name="arch" type="xml">
+        <field name="user_id" position="after">
+          <field name="write_uid" />
+        </field>
+      </field>
+    </record>
+    -->
 
   </data>
 </openerp>

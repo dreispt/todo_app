@@ -36,12 +36,12 @@ class Stage(models.Model):
 
 
 class Tags(models.Model):
-    _name = 'todo.tag'
-    _rec_name = 'name'
-    _order = 'name'
+    _name = 'todo.task.tag'
+    _parent_store = True
+    # _parent_name = 'parent_id'
+    name = fields.Char('Name', size=30)
+    parent_id = fields.Many2one('todo.task.tag', 'Parent Tag')
 
-    name = fields.Char('Name', size=30, translate=True)
-    #tasks0 = fields.Many2many('')
     tasks = fields.Many2many('todo.task', string='Tasks')
 
 
@@ -50,7 +50,7 @@ class TodoTask(models.Model):
 
     # Relational fields
     stage = fields.Many2one('todo.stage', 'Stage')
-    tags = fields.Many2many('todo.tag', string='Tags')
+    tags = fields.Many2many('todo.task.tag', string='Tags')
 
     state = fields.Selection(
         string='Stage State',
