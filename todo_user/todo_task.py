@@ -3,7 +3,6 @@ from openerp import models, fields, api
 
 
 class TodoTask(models.Model):
-    #_inherit = 'todo.task'
     _name = 'todo.task'
     _inherit = ['todo.task', 'mail.thread']
 
@@ -22,5 +21,4 @@ class TodoTask(models.Model):
     @api.one
     def do_toggle_done(self):
         if self.active:
-            res = super(TodoTask, self).do_toggle_done()
-            return res
+            return super(TodoTask, self).do_toggle_done()

@@ -2,10 +2,17 @@
 <openerp>
   <data noupdate="1">
 
-    <record id="todo_app.todo_task_user_rule" model="ir.rule">
+    <delete model="ir.rule"
+            search="[('id', '=', ref('todo_app.todo_task_user_rule'))]" />
+
+    <record id="todo_task_per_user_rule" model="ir.rule">
+        <field name="name">ToDo Tasks only for owner</field>
+        <field name="model_id" ref="model_todo_task"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
         <field name="domain_force">
-            ['|', ('create_uid','=',user.id)
-                , ('message_follower_ids', 'in', '[user.partner_id.id]')]
+          ['|',('user_id','=', user.id),
+               ('message_follower_ids','in',[user.partner_id.id])
+          ]
         </field>
     </record>
 

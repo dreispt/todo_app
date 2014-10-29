@@ -49,10 +49,22 @@
       <field name="arch" type="xml">
         <field name="name" position="after">
           <field name="user_id" />
-          <filter string="Not Assigned"
-              domain="[('user_id','=',False)]" />
+          <filter name="filter_my_tasks" string="My Tasks"
+                  domain="[('user_id','in',[uid,False])]" />
+          <filter name="filter_not_assigned" string="Not Assigned"
+                  domain="[('user_id','=',False)]" />
         </field>
       </field>
+    </record>
+
+    <!-- Modify menu item -->
+    <record id="todo_app.menu_todo_task" model="ir.ui.menu">
+        <field name="name">My To-Do</field>
+    </record>
+
+    <!-- Action to open To-Do Task list -->
+    <record model="ir.actions.act_window" id="todo_app.action_todo_task">
+        <field name="context">{'search_default_filter_my_tasks': True}</field>
     </record>
 
   </data>
