@@ -1,6 +1,6 @@
-from openerp import models, fields
+from openerp import models, fields, api
 from openerp.addons.base.res.res_request import referencable_models
-
+import datetime
 
 class Stage(models.Model):
     _name = 'todo.stage'
@@ -63,3 +63,26 @@ class TodoTask(models.Model):
         #referencable_models,  # selection=
         'Refers to',  # string=
     )
+
+    user_email = fields.Char(
+        'user email',
+        compute='_compute_user_email',
+        store=True)
+
+    @api.one
+    def _compute_user_email(self):
+        self.user_email = self.user_id.email
+
+    days_deadline = fields.Integer(
+        'Days to deadline',
+        compute='_compute_days_deadline')
+
+    @api.one
+    def _compute_days_deadline(self):
+        if self.date_deadline:
+            d1 = fields.Date.from_string(self.date_deadline)
+            d0 = fields.Date.from_string(fields.Date.today())
+            delta = d1 - d0
+            print 'compute', self, self.date_deadline, delta.days
+            #import pudb; pudb.set_trace()
+            self.days_deadline = delta.days
