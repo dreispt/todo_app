@@ -1,10 +1,7 @@
 {
     'name': 'User interface improvements to the To-Do app',
-    'description': 'User freindly features, including kanban board.',
+    'description': 'User friendly features.',
     'author': 'Daniel Reis',
     'depends': ['todo_app'],
-    'data': [
-        'todo_view.xml',
-        # 'security/ir.model.access.csv',
-    ],
+    'data': ['todo_view.xml'],
 }

@@ -1,67 +1,102 @@
 from openerp import models, fields, api
-from openerp.addons.base.res.res_request import referencable_models
-import datetime
+from openerp.addons.base.res import res_request
+
+
+class Tag(models.Model):
+    _name = 'todo.task.tag'
+    name = fields.Char('Name', size=40, translate=True)
+
+    # Many2many inverse relation
+    tasks = fields.Many2many('todo.task', string='Tasks')
+
+    # Hierarchic relations:
+    _parent_store = True
+    _parent_name = 'parent_id'  # the default
+    parent_id = fields.Many2one('todo.task.tag', 'Parent Tag')
+    # parent_left = fields.Integer('Parent Left', index=True)
+    # parent_right = fields.Integer('Parent Right', index=True)
+    child_ids = fields.One2many('todo.task.tag', 'parent_id', 'Child Tags')
+
 
 class Stage(models.Model):
-    _name = 'todo.stage'
+    _name = 'todo.task.stage'
+    _order = 'sequence,name'
+    _rec_name = 'name'  # the default
+    _table_name = 'todo_task_stage'  # the default
+
+    # Field attributes:
     name = fields.Char(
         string='Name',
-        help='The title for the stage.',
-        readonly=False,
-        required=True,
-        index=True,
+        # Common field attributes:
         copy=False,
         default='New',
-        # states
-        # groups
+        groups="base.group_user,base.group_no_one",
+        help='The title for the stage.',
+        index=True,
+        readonly=False,
+        required=True,
+        states={'done': [('readonly', False)]},
+        # String only attributes:
+        size=40,
+        translate=True,
     )
+
+    # Other string fields:
     desc = fields.Text('Description')
-    fold = fields.Boolean('Folded?')
-    sequence = fields.Integer('Sequence')
-    perc_complete = fields.Float('% Complete', (3, 2))
     state = fields.Selection(
         [('draft', 'New'), ('open', 'Started'), ('done', 'Closed')],
-        'State'
+        'State',
     )
-    # Date, Datetime
-    # HTML
-    # Binary, Sparse?
+    docs = fields.Html('Documentation')
+
+    # Numeric fields:
+    sequence = fields.Integer('Sequence')
+    perc_complete = fields.Float('% Complete', (3, 2))
+
+    # Date fields:
+    effective_date = fields.Date('Effective Date')
+    write_date = fields.Datetime('Last Changed')
+
+    # Other fields:
+    fold = fields.Boolean('Folded?')
+    image = fields.Binary('Image')
+
+    # One2many inverse relation:
     tasks = fields.One2many('todo.task', 'stage', 'Tasks in this stage')
-
-    # Computed:
-    # compute
-    # inverse
-    # search
-    # store
-
-
-class Tags(models.Model):
-    _name = 'todo.task.tag'
-    _parent_store = True
-    # _parent_name = 'parent_id'
-    name = fields.Char('Name', size=30)
-    parent_id = fields.Many2one('todo.task.tag', 'Parent Tag')
-
-    tasks = fields.Many2many('todo.task', string='Tasks')
 
 
 class TodoTask(models.Model):
     _inherit = 'todo.task'
 
     # Relational fields
-    stage = fields.Many2one('todo.stage', 'Stage')
-    tags = fields.Many2many('todo.task.tag', string='Tags')
+    stage = fields.Many2one('todo.task.stage', 'Stage')
+    tags = fields.Many2many(
+        'todo.task.tag',      # related= (model name)
+        'todo_task_tag_rel',  # relation= (table name)
+        'task',               # column1= ("this" field)
+        'tag',                # column2= ("other" field)
+        string='Tags',
+
+        # Relational field attributes:
+        auto_join=False,
+        context={},
+        domain=[('parent_id', '!=', False)],
+        ondelete='cascade',
+        ### domain=['|', ('effective_date','=',False), ('effective_date','<=',)],
+    )
+    # Dynamic Reference fields:
+    refers_to = fields.Reference(
+        # Set a Selection list, such as:
+        # [('res.user', 'User'), ('res.partner', 'Partner')],
+        # Or use standard "Referencable Models":
+        res_request.referencable_models,
+        'Refers to',  # string= (title)
+    )
 
     state = fields.Selection(
         string='Stage State',
         related='stage.state',
         store=True,
-    )
-
-    refers_to = fields.Reference(
-        [('res.user', 'User'), ('res.partner', 'Partner')],
-        #referencable_models,  # selection=
-        'Refers to',  # string=
     )
 
     user_email = fields.Char(
