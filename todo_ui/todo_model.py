@@ -1,5 +1,11 @@
 from openerp import models, fields, api
 from openerp.addons.base.res import res_request
+from openerp.exceptions import ValidationError
+
+
+def referencable_models(self):
+    return res_request.referencable_models(
+        self, self.env.cr, self.env.uid, context=self.env.context)
 
 
 class Tag(models.Model):
@@ -13,8 +19,8 @@ class Tag(models.Model):
     _parent_store = True
     _parent_name = 'parent_id'  # the default
     parent_id = fields.Many2one('todo.task.tag', 'Parent Tag')
-    # parent_left = fields.Integer('Parent Left', index=True)
-    # parent_right = fields.Integer('Parent Right', index=True)
+    parent_left = fields.Integer('Parent Left', index=True)
+    parent_right = fields.Integer('Parent Right', index=True)
     child_ids = fields.One2many('todo.task.tag', 'parent_id', 'Child Tags')
 
 
@@ -46,6 +52,7 @@ class Stage(models.Model):
     state = fields.Selection(
         [('draft', 'New'), ('open', 'Started'), ('done', 'Closed')],
         'State',
+        # selection_add= When extending a Model, adds items to selection list
     )
     docs = fields.Html('Documentation')
 
@@ -79,45 +86,53 @@ class TodoTask(models.Model):
 
         # Relational field attributes:
         auto_join=False,
-        context={},
-        domain=[('parent_id', '!=', False)],
+        context="{}",
+        domain="[]",
         ondelete='cascade',
-        ### domain=['|', ('effective_date','=',False), ('effective_date','<=',)],
     )
     # Dynamic Reference fields:
     refers_to = fields.Reference(
         # Set a Selection list, such as:
         # [('res.user', 'User'), ('res.partner', 'Partner')],
         # Or use standard "Referencable Models":
-        res_request.referencable_models,
+        referencable_models,
         'Refers to',  # string= (title)
     )
-
-    state = fields.Selection(
-        string='Stage State',
+    # Related fields:
+    stage_state = fields.Selection(
         related='stage.state',
-        store=True,
+        string='Stage State',
+        store=True,  # optional
+    )
+    # Calculated fields:
+    stage_fold = fields.Boolean(
+        string='Stage Folded?',
+        compute='_compute_stage_fold',
+        search='_search_stage_fold',
+        inverse='_write_stage_fold',
+        store=False,  # the default
     )
 
-    user_email = fields.Char(
-        'user email',
-        compute='_compute_user_email',
-        store=True)
+    @api.one
+    @api.depends('stage', 'stage.fold')
+    def _compute_stage_fold(self):
+        self.stage_fold = self.stage.fold
+
+    def _search_stage_fold(self, operator, value):
+        return [('stage.fold', operator, value)]
+
+    def _write_stage_fold(self):
+        self.stage.fold = self.stage_fold
+
+    # Constraints
+    _sql_constraints = [(
+        'todo_task_name_unique',
+        'UNIQUE (name, user_id, active)',
+        'Task title must be unique!'
+    )]
 
     @api.one
-    def _compute_user_email(self):
-        self.user_email = self.user_id.email
-
-    days_deadline = fields.Integer(
-        'Days to deadline',
-        compute='_compute_days_deadline')
-
-    @api.one
-    def _compute_days_deadline(self):
-        if self.date_deadline:
-            d1 = fields.Date.from_string(self.date_deadline)
-            d0 = fields.Date.from_string(fields.Date.today())
-            delta = d1 - d0
-            print 'compute', self, self.date_deadline, delta.days
-            #import pudb; pudb.set_trace()
-            self.days_deadline = delta.days
+    @api.constrains('name')
+    def _check_name_size(self):
+        if len(self.name) < 5:
+            raise ValidationError('Title must have 5 chars!')

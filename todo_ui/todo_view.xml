@@ -1,10 +1,27 @@
 <openerp>
   <data>
 
+  <!-- Tags form -->
+    <record id="view_form_todo_tag" model="ir.ui.view">
+      <field name="name">view_form_todo_tag</field>
+      <field name="model">todo.task.tag</field>
+      <field name="arch" type="xml">
+        <form>
+          <group>
+            <field name="name" />
+            <field name="tasks" />
+            <field name="parent_id" />
+            <field name="child_ids" />
+          </group>
+        </form>
+      </field>
+    </record>
+
+
     <!-- Stages form -->
     <record id="view_form_todo_stage" model="ir.ui.view">
       <field name="name">view_form_todo_stage</field>
-      <field name="model">todo.stage</field>
+      <field name="model">todo.task.stage</field>
       <field name="arch" type="xml">
         <form>
           <group>
@@ -19,21 +36,6 @@
       </field>
     </record>
 
-  <!-- Tags form -->
-    <record id="view_form_todo_tag" model="ir.ui.view">
-      <field name="name">view_form_todo_tag</field>
-      <field name="model">todo.task.tag</field>
-      <field name="arch" type="xml">
-        <form>
-          <group>
-            <field name="name" />
-            <field name="tasks" />
-          </group>
-        </form>
-      </field>
-    </record>
-
-
     <!-- Extend form -->
     <record id="view_form_todo_task_inherited" model="ir.ui.view">
       <field name="name">view_form_todo_task_inherited</field>
@@ -43,25 +45,13 @@
 
         <field name="name" position="after">
           <field name="stage" />
-          <field name="state" />
+          <field name="stage_state" />
           <field name="refers_to" />
           <field name="tags" />
         </field>
       </field>
 
     </record>
-    <!--
-    <record id="view_form_todo_task_inherited2" model="ir.ui.view">
-      <field name="name">view_form_todo_task_inherited2</field>
-      <field name="model">todo.task</field>
-      <field name="inherit_id" ref="todo_user.view_form_todo_task_inherited"/>
-      <field name="arch" type="xml">
-        <field name="user_id" position="after">
-          <field name="write_uid" />
-        </field>
-      </field>
-    </record>
-    -->
 
   </data>
 </openerp>
