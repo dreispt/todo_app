@@ -10,6 +10,7 @@ class TodoTask(models.Model):
 
     @api.one
     def do_toggle_done(self):
+        print self.env.context
         self.is_done = not self.is_done
 
     @api.multi

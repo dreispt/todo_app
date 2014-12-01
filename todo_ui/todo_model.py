@@ -136,3 +136,14 @@ class TodoTask(models.Model):
     def _check_name_size(self):
         if len(self.name) < 5:
             raise ValidationError('Title must have 5 chars!')
+
+    @api.one
+    def compute_user_todo_count(self):
+        self.user_todo_count = self.search_count(
+            [('user_id', '=', self.user_id.id)])
+
+    user_todo_count = fields.Integer(
+        'User To-Do Count',
+        compute='compute_user_todo_count'
+    )
+    effort_estimate = fields.Integer('Effort Estimate')
