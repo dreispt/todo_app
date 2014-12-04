@@ -1,0 +1,31 @@
+<openerp>
+  <data>
+
+    <record id="view_form_todo_wizard" model="ir.ui.view">
+      <field name="name">view_form_todo_wizard</field>
+      <field name="model">todo.wizard</field>
+      <field name="arch" type="xml">
+
+        <form>
+            <group>
+                <field name="tasks" />
+                <field name="new_deadline" />
+                <field name="new_user" />
+            </group>
+            <button type="object" name="button_test" string="Test" />
+        </form>
+
+      </field>
+    </record>
+
+    <!-- Menu and Action -->
+    <act_window id="todo_app.action_todo_wizard"
+        name=" To-Do Tasks Wizard"
+        src_model="todo.task"
+        res_model="todo.wizard"
+        view_mode="form"
+        target="new"
+        />
+
+  </data>
+</openerp>
