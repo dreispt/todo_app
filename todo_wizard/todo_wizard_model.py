@@ -13,3 +13,8 @@ class TodoWizard(models.TransientModel):
         print "Press 'h' for help, 'c' to continue."
         from pprint import pprint as pp
         import pdb; pdb.set_trace()
+
+    @api.one
+    def do_set_deadline(self):
+        for task in self.tasks:
+            task.date_deadline = self.new_deadline
