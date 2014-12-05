@@ -13,7 +13,12 @@
                 <field name="new_user" />
             </group>
             <footer>
+                <button type="object" name="do_mass_update"
+                    string="Update" class="oe_highlight"
+                    attrs="{'invisible': [('tasks','=',[])]}"/>
                 <button type="object" name="button_test" string="Test" />
+                <button type="object" name="do_populate"
+                    string="Populate" />
                 <button special="cancel" string="Cancel"/>
             </footer>
         </form>
@@ -23,7 +28,7 @@
 
     <!-- Menu and Action -->
     <act_window id="todo_app.action_todo_wizard"
-        name=" To-Do Tasks Wizard"
+        name="To-Do Tasks Wizard"
         src_model="todo.task"
         res_model="todo.wizard"
         view_mode="form"
