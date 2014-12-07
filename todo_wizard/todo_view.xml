@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<openerp>
+  <data>
+
+    <!-- To-Do Task Form view -->
+    <record id="view_form_todo_task_inherited" model="ir.ui.view">
+      <field name="name">view_form_todo_task_inherited</field>
+      <field name="model">todo.task</field>
+      <field name="inherit_id" ref="todo_app.view_form_todo_task"/>
+      <field name="arch" type="xml">
+
+          <button name="do_clear_done" position="after">
+              <button name="button_interact" type="object" string="Interact!" />
+          </button>
+
+      </field>
+    </record>
+
+  </data>
+</openerp>
