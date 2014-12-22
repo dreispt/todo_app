@@ -10,7 +10,9 @@
             <templates>
               <t t-name="kanban-box">
                   <div class="oe_kanban_vignette">
-                      <!-- <img class="oe_kanban_image" ... /> -->
+                     <img t-att-src="kanban_image(
+                          'res.partner', 'image_medium', record.id.value)"
+                          class="oe_kanban_image"/>
                     <div class="oe_kanban_details">
                         <h4><a type="open">
                                 <field name="name" />

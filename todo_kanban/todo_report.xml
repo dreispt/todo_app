@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report
+            id="report_todo_task"
+            string="To-do Tasks"
+            model="todo.task"
+            report_type="qweb-pdf"
+            name="report_todo_task"
+        />
+    </data>
+</openerp>
