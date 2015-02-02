@@ -1,0 +1,133 @@
+<openerp>
+  <data>
+
+    <record id="view_form_todo_task_kanban" model="ir.ui.view">
+      <field name="name">view_form_todo_task_kanban</field>
+      <field name="model">todo.task</field>
+      <field name="arch" type="xml">
+
+        <kanban default_group_by="stage">
+            <field name="message_follower_ids" />
+            <field name="color" />
+            <field name="name" />
+            <templates>
+              <t t-name="kanban-box">
+                  <div t-attf-class="oe_kanban_card #{kanban_color(record.color.raw_value)}">
+                      <div class="oe_kanban_content">
+
+                        <!-- Top-right option menu -->
+                        <div class="oe_dropdown_kanban oe_dropdown_toggle">
+                            <span class="oe_e">í</span>
+                            <ul class="oe_dropdown_menu">
+                                <t t-if="widget.view.is_action_enabled('edit')">
+                                    <li><a type="edit">Edit...</a></li>
+                                </t>
+                                <t t-if="widget.view.is_action_enabled('delete')">
+                                    <li><a type="delete">Delete</a></li>
+                                </t>
+                                <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
+                            </ul>
+                        </div>
+
+                        <!-- Main content -->
+                        <h4><a type="open">
+                                <!--
+                                <field name="name" />
+                                -->
+                                <t t-esc="kanban_text_ellipsis(record.name.value, 32)" />
+                        </a></h4>
+                        <field name="tag_ids" />
+                        <ul>
+                            <li><field name="user_id" /></li>
+                            <li>
+                                <!-- t-attf example -->
+                                <!--
+                                <span t-attf-class="oe_kanban_text{{
+                                    record.date_deadline.raw_value and
+                                    !(record.date_deadline.raw_value > (new Date()))
+                                    ? '_red' : '_black' }}">
+                                    <field name="date_deadline"/>
+                                </span>
+                                -->
+                                <!-- t-set basic example -->
+                                <t t-set="red_or_black" t-value="
+                                    record.date_deadline.raw_value and
+                                    record.date_deadline.raw_value lte (new Date())
+                                    ? 'oe_kanban_text_red' : ''" />
+                                <span t-att-class="red_or_black">
+                                    <field name="date_deadline" />
+                                </span>
+                                <!-- t-set with HTML content example -->
+                                <!--
+                                <t t-set="calendar_sign">
+                                    <span class="oe_e">&#128197;</span>
+                                </t>
+                                <t t-raw="calendar_sign" />
+                                -->
+
+                            </li>
+                        </ul>
+                        <t t-if="record.effort_estimate.raw_value > 0">
+                            <li>Estimate <field name="effort_estimate"/></li>
+                        </t>
+
+                        <!-- Follower avatars -->
+                        <!--
+                        <div>
+                        <t t-foreach="record.message_follower_ids.raw_value.slice(0, 3)" t-as="rec">
+                            <img t-att-src="kanban_image('res.partner', 'image_small', rec)"
+                                 class="oe_kanban_image oe_kanban_avatar_smallbox"/>
+                        </t>
+                        </div>
+                        -->
+                        <t t-call="follower_avatars">
+                            <t t-set="arg_max" t-value="2" />
+                        </t>
+
+                        <div class="oe_kanban_bottom_right">
+                            <field name="kanban_state" widget="kanban_state_selection"/>
+                        </div>
+
+                        <div class="oe_kanban_footer_left">
+                            <field name="priority" widget="priority"/>
+                        </div>
+                    </div>
+                </div>
+              </t>
+
+              <t t-name="follower_avatars">
+                    <div>
+                        <t t-foreach="record.message_follower_ids.raw_value.slice(0, arg_max)" t-as="rec">
+                            <img t-att-src="kanban_image('res.partner', 'image_small', rec)"
+                                 class="oe_kanban_image oe_kanban_avatar_smallbox"/>
+                        </t>
+                    </div>
+              </t>
+
+    <t t-extend="mail.wall.sidebar">
+        <t t-jquery=".oe_mail_wall_sidebar" t-operation="append">
+                      Hello!
+        </t>
+    </t>
+
+
+
+          </templates>
+        </kanban>
+
+      </field>
+    </record>
+
+    <!-- Menu and Action -->
+    <act_window id="todo_app.action_todo_task"
+        name=" To-Do Tasks"
+        res_model="todo.task"
+        view_mode="kanban,tree,form,calendar,gantt,graph"
+        target="current"
+        context="{'search_default_filter_my_tasks': True}"
+        domain=""
+        limit=""
+        />
+
+  </data>
+</openerp>

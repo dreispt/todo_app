@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <report
+            id="report_todo_task_action"
+            string="To-do Tasks"
+            model="todo.task"
+            report_type="qweb-html"
+            name="todo_kanban.report_todo_task_template"
+        />
+
+        <template id="report_todo_task_template_0">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                    <div class="page">
+                        <h2>To-do Task</h2>
+                        <span t-field="o.name" />
+                        <span t-field="o.company_id" />
+                    </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="report_todo_task_template">
+          <t t-call="report.html_container">
+            <t t-foreach="doc_ids" t-as="doc_id">
+              <t t-raw="translate_doc(doc_id, doc_model, 'user_id.partner_id.lang', 'todo_kanban.report_todo_task_doc')"/>
+            </t>
+          </t>
+        </template>
+
+        <template id="report_todo_task_doc">
+          <t t-call="report.external_layout">
+              <div class="page">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h2><span t-field="o.name" /></h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-8">
+                        By: <span t-field="o.user_id" />
+                    </div>
+                    <div class="col-xs-4">
+                        Deadline: <span t-field="o.date_deadline" />
+                    </div>
+                </div>
+                <!-- Table -->
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Avatar</th>
+                        <th>Name</th>
+                    </tr>
+                    <t t-set="total" t-value="0" />
+                    <t t-foreach="o.message_follower_ids" t-as="f">
+                        <t t-set="total" t-value="total+1" />
+                        <tr>
+                            <td>
+                              <img t-if="f.image_small" t-att-src="'data:image/png;base64,%s' % f.image_small" style="max-height: 32px;" />
+                            </td>
+                            <td><span t-field="f.name"/></td>
+                        </tr>
+                        <!-- Totals in a last row -->
+                        <t t-if="f_last">
+                            <tr>
+                                <td colspan="2"><strong><p class="text-right"><t t-esc="total"/> followers</p></strong></td>
+                            </tr>
+                        </t>
+                        <!-- ... -->
+                    </t>
+                </table>
+                <!-- Totals after the table -->
+                    <t t-set="total" t-value="0" />
+                    <t t-foreach="o.message_follower_ids" t-as="f">
+                        <t t-set="total" t-value="total+1" />
+                        <t t-if="f_last">
+                            <strong><p class="text-right"><t t-esc="total"/> followers</p></strong>
+                        </t>
+                    </t>
+            </div>
+          </t>
+        </template>
+
+    </data>
+</openerp>

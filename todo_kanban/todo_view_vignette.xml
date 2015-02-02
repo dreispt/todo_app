@@ -1,0 +1,49 @@
+<openerp>
+  <data>
+
+    <record id="view_form_todo_task_kanban" model="ir.ui.view">
+      <field name="name">view_form_todo_task_kanban</field>
+      <field name="model">todo.task</field>
+      <field name="arch" type="xml">
+
+        <kanban>
+            <templates>
+              <t t-name="kanban-box">
+                  <div class="oe_kanban_vignette">
+                     <img t-att-src="kanban_image(
+                          'res.partner', 'image_medium', record.id.value)"
+                          class="oe_kanban_image"/>
+                    <div class="oe_kanban_details">
+                        <h4><a type="open">
+                                <field name="name" />
+                        </a></h4>
+                        <field name="tag_ids" />
+                        <ul>
+                            <li><field name="user_id" /></li>
+                            <li><field name="date_deadline" /></li>
+                        </ul>
+                     <field name="kanban_state"
+                            widget="kanban_state_selection"/>
+                     <field name="priority" widget="priority"/>
+                    </div>
+                </div>
+              </t>
+          </templates>
+        </kanban>
+
+      </field>
+    </record>
+
+    <!-- Menu and Action -->
+    <act_window id="todo_app.action_todo_task"
+        name=" To-Do Tasks"
+        res_model="todo.task"
+        view_mode="kanban,tree,form,calendar,gantt,graph"
+        target="current"
+        context="{'search_default_filter_my_tasks': True}"
+        domain=""
+        limit=""
+        />
+
+  </data>
+</openerp>
