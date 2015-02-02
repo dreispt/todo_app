@@ -1,0 +1,43 @@
+<openerp>
+  <data>
+
+    <record id="view_form_todo_wizard" model="ir.ui.view">
+      <field name="name">view_form_todo_wizard</field>
+      <field name="model">todo.wizard</field>
+      <field name="arch" type="xml">
+
+        <form>
+            <div class="oe_right">
+                <button type="object" name="do_count_tasks" string="Count" />
+                <button type="object" name="do_populate_tasks" string="Get All" />
+                <button type="object" name="do_reopen_form" string="Reopen" />
+            </div>
+            <field name="task_ids" />
+            <group>
+                <group> <field name="new_deadline" /> </group>
+                <group> <field name="new_user_id" /> </group>
+            </group>
+            <footer>
+                <button type="object" name="do_mass_update"
+                    string="Mass Update" class="oe_highlight"
+                    attrs="{'invisible':
+                            [('new_deadline','=',False),
+                             ('new_user_id', '=',False)]}"/>
+                or <button special="cancel" string="Cancel"/>
+            </footer>
+        </form>
+
+      </field>
+    </record>
+
+    <!-- More button Action -->
+    <act_window id="todo_app.action_todo_wizard"
+        name="To-Do Tasks Wizard"
+        src_model="todo.task"
+        res_model="todo.wizard"
+        view_mode="form"
+        target="new"
+        />
+
+  </data>
+</openerp>
