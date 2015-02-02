@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<openerp>
+  <data>
+
+    <!-- Action to open To-Do Task list -->
+    <act_window id="action_todo_task"
+      name="To-do Task"
+      res_model="todo.task"
+      view_mode="tree,form" />
+
+    <!-- Menu Item to open To-Do Task list -->
+    <menuitem id="menu_todo_task"
+      name="To-Do Tasks"
+      parent="mail.mail_feeds"
+      sequence="20"
+      action="action_todo_task" />
+
+    <!-- To-Do Task Form view -->
+    <record id="view_form_todo_task" model="ir.ui.view">
+      <field name="name">To-do Task Form</field>
+      <field name="model">todo.task</field>
+      <field name="arch" type="xml">
+
+        <form>
+          <header>
+            <button name="do_toggle_done" type="object"
+                    string="Toggle Done" class="oe_highlight"/>
+            <button name="do_clear_done" type="object"
+                    string="Clear All Done" />
+          </header>
+          <sheet>
+            <group name="group_top">
+              <group name="group_left">
+                <field name="name"/>
+              </group>
+              <group name="group_right">
+                <field name="is_done"/>
+                <field name="active" readonly="1"/>
+              </group>
+            </group>
+          </sheet>
+        </form>
+
+      </field>
+    </record>
+
+    <!-- To-Do Task List view -->
+    <record id="view_tree_todo_task" model="ir.ui.view">
+      <field name="name">To-do Task Tree</field>
+      <field name="model">todo.task</field>
+      <field name="arch" type="xml">
+        <tree colors="gray:is_done==True">
+          <field name="name"/>
+          <field name="is_done"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- To-Do Task Search view -->
+    <record id="view_filter_todo_task" model="ir.ui.view">
+      <field name="name">To-do Task Filter</field>
+      <field name="model">todo.task</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="name"/>
+          <filter string="Not Done" domain="[('is_done','=',False)]"/>
+          <filter string="Done" domain="[('is_done','!=',False)]"/>
+        </search>
+      </field>
+    </record>
+
+  </data>
+</openerp>
