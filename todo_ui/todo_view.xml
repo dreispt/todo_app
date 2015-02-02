@@ -1,0 +1,178 @@
+<openerp>
+  <data>
+
+    <!-- Window Actions -->
+    <act_window id="action_todo_stage"
+        name="To-Do Task Stages"
+        res_model="todo.task.stage"
+        view_mode="tree,form"
+        />
+
+    <act_window id="todo_app.action_todo_task"
+        name="To-Do Tasks"
+        res_model="todo.task"
+        view_mode="tree,form,calendar,gantt,graph"
+        target="current"
+        context="{'default_user_id': uid}"
+        domain="[]"
+        limit="80"
+        />
+
+    <!-- More button action -->
+    <act_window id="action_todo_task_stage"
+        name="To-Do Task Stages"
+        res_model="todo.task.stage"
+        src_model="todo.task"
+        />
+
+
+    <!-- Menu Items -->
+    <menuitem id="menu_todo_task_main"
+      name="To-Do" parent="mail.mail_my_stuff" />
+
+    <menuitem id="todo_app.menu_todo_task"
+      name="To-Do Tasks"
+      parent="menu_todo_task_main"
+      sequence="10"
+      action="todo_app.action_todo_task" />
+
+    <menuitem id="menu_todo_task_stage"
+      name="To-Do Stages"
+      parent="menu_todo_task_main"
+      sequence="20"
+      action="action_todo_stage" />
+
+
+    <record id="view_form_todo_task_ui" model="ir.ui.view">
+      <field name="name">view_form_todo_task_ui</field>
+      <field name="model">todo.task</field>
+      <field name="priority">10</field>
+      <field name="arch" type="xml">
+
+        <form>
+          <header>
+            <field name="stage_state" invisible="True" />
+            <button name="do_toggle_done" type="object"
+                    string="Toggle Done" class="oe_highlight"
+                    attrs="{'invisible': [('stage_state','in',['draft','cancel'])]}"
+                    />
+            <field name="stage_id" widget="statusbar"
+                   clickable="True" options="{'fold_field': 'fold'}" />
+          </header>
+
+          <sheet>
+            <!-- Title -->
+            <div class="oe_title">
+              <label for="name" class="oe_edit_only" />
+              <h1> <field name="name" /> </h1>
+              <h3>
+                <span class="oe_read_only">By </span>
+                <label for="user_id" class="oe_edit_only" />
+                <field name="user_id" class="oe_inline" />
+              </h3>
+            </div>
+
+            <!-- Smart buttons -->
+            <div name="buttons" class="oe_right oe_button_box">
+                <button class="oe_stat_button"
+                        type="action" icon="fa-tasks"
+                        name="%(todo_app.action_todo_task)d"
+                        context="{'search_default_user_id': user_id, 'default_user_id': user_id}"
+                        string=""
+                        help="Other to-dos for this user" >
+                    <field string="User To-dos" name="user_todo_count"
+                           widget="statinfo"/>
+                </button>
+            </div>
+
+            <!-- Details -->
+            <group name="top_group">
+              <group name="left_group">
+                <field name="date_deadline" />
+                <field name="effort_estimate" />
+                <separator string="References" />
+                <field name="refers_to" />
+              </group>
+              <group name="right_group">
+                <field name="tag_ids" widget="many2many_tags"/>
+              </group>
+            </group>
+          </sheet>
+          <div class="oe_chatter">
+              <field name="message_follower_ids" widget="mail_followers" />
+              <field name="message_ids" widget="mail_thread" />
+          </div>
+        </form>
+
+      </field>
+    </record>
+
+    <!-- To-Do Task List view -->
+    <record id="todo_app.view_tree_todo_task" model="ir.ui.view">
+      <field name="name">To-do Task Tree</field>
+      <field name="model">todo.task</field>
+      <field name="arch" type="xml">
+          <tree colors="gray:is_done==True"
+                font="italic:stage_state!='open'"
+                delete="false">
+          <field name="is_done" invisible="True"/>
+          <field name="stage_state" invisible="True"/>
+          <field name="name"/>
+          <field name="user_id"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="todo_app.view_filter_todo_task" model="ir.ui.view">
+      <field name="name">To-do Task Filter</field>
+      <field name="model">todo.task</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="name"
+                 filter_domain="['|', ('name', 'ilike', self), ('user_id', 'ilike', self)]"/>
+          <field name="user_id"/>
+          <filter name="filter_not_done" string="Not Done" domain="[('is_done','=',False)]"/>
+          <filter name="filter_done" string="Done" domain="[('is_done','!=',False)]"/>
+          <separator/>
+          <filter name="group_user" string="By User" context="{'group_by': 'user_id'}"/>
+        </search>
+      </field>
+    </record>
+
+    <record id="view_calendar_todo_task" model="ir.ui.view">
+      <field name="name">view_calendar_todo_task</field>
+      <field name="model">todo.task</field>
+      <field name="arch" type="xml">
+          <calendar date_start="date_deadline" color="user_id"
+                    display="[name], Stage [stage_id]">
+            <field name="name" />
+            <field name="stage_id" />
+        </calendar>
+      </field>
+    </record>
+
+    <record id="view_gantt_todo_task" model="ir.ui.view">
+      <field name="name">view_gantt_todo_task</field>
+      <field name="model">todo.task</field>
+      <field name="arch" type="xml">
+        <gantt date_start="date_deadline"
+               date_stop="date_deadline"
+               default_group_by="user_id" />
+      </field>
+    </record>
+
+    <record id="view_graph_todo_task" model="ir.ui.view">
+      <field name="name">view_graph_todo_task</field>
+      <field name="model">todo.task</field>
+      <field name="arch" type="xml">
+        <graph type="pivot">
+          <field name="stage_id" type="col" />
+          <field name="user_id" />
+          <field name="date_deadline" interval="week" />
+          <field name="effort_estimate" type="measure"/>
+        </graph>
+      </field>
+    </record>
+
+  </data>
+</openerp>
