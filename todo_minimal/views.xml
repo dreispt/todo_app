@@ -1,0 +1,53 @@
+<openerp>
+  <data>
+
+    <record id="todo_task_tree" model="ir.ui.view">
+        <field name="name">To-do Task Form</field>
+        <field name="model">todo.task</field>
+        <field name="arch" type="xml">
+            <tree editable="top" colors="gray:is_done==True">
+                <field name="name" />
+                <field name="is_done" />
+            </tree>
+         </field>
+    </record>
+
+    <act_window id="todo_task_action"
+      name="To-do Task Action"
+      res_model="todo.task"
+      view_mode="tree" />
+
+    <!-- Menu Item to open To-Do Task list -->
+    <menuitem id="todo_task_menu"
+      name="To-do Tasks"
+      parent="mail.mail_feeds"
+      sequence="20"
+      action="todo_task_action" />
+
+    <record id="todo_task_clear_dialog" model="ir.ui.view">
+      <field name="name">To-do Clear Wizard</field>
+      <field name="model">todo.task.clear</field>
+      <field name="arch" type="xml">
+        <form>
+            All done tasks will be cleared, even if unselected.
+            <br/>Continue?
+            <footer>
+                <button type="object" name="do_clear_done"
+                    string="Clear" class="oe_highlight" />
+                <button special="cancel" string="Cancel"/>
+            </footer>
+        </form>
+      </field>
+    </record>
+
+    <!-- More button Action -->
+    <act_window id="todo_task_clear_action"
+        name="Clear Done"
+        src_model="todo.task"
+        res_model="todo.task.clear"
+        view_mode="form"
+        target="new" multi="True"
+        />
+
+  </data>
+</openerp>
