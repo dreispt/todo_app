@@ -9,7 +9,7 @@ book.
 An Odoo application for “to-do” tasks is used to showcase module development.
 
 * Chapter 1: scripts and Samba sample file are in `_ch01_install/`
-* Chapter 2: code in the `todo_app` mdoule
+* Chapter 2: code in the `todo_app` module
 * Chapters 3 and 4: code in the `todo_user` module
 * Chapters 5 and 6: code in the `todo_ui`module
 * Chapter 7: code in the `todo_wizard` module
