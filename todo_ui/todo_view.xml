@@ -118,6 +118,10 @@
           <field name="is_done" invisible="True"/>
           <field name="stage_state" invisible="True"/>
           <field name="name"/>
+          <!-- The todo_app tree view is replaced, but extensions added by other modules
+               still apply. So the user_id will be added by an extension in the the todo_user model
+               <field name="user_id" />
+          -->
           <field name="date_deadline"/>
         </tree>
       </field>
