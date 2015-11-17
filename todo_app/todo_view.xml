@@ -10,9 +10,7 @@
 
     <!-- Menu Item to open To-Do Task list -->
     <menuitem id="menu_todo_task"
-      name="To-Do Tasks"
-      parent="mail.mail_feeds"
-      sequence="20"
+      name="Todos"
       action="action_todo_task" />
 
     <!-- To-Do Task Form view -->
