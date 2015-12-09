@@ -5,7 +5,8 @@
     'depends': ['base'],
     'application': True,
     'data': [
-        'todo_view.xml',
+        'views/todo_view.xml',
+        'views/todo_menu.xml',
         'security/ir.model.access.csv',
         'security/todo_access_rules.xml',
     ]

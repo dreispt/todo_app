@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from openerp.tests.common import TransactionCase
-from openerp.exceptions import AccessError
 
 
 class TestTodo(TransactionCase):
@@ -24,10 +23,3 @@ class TestTodo(TransactionCase):
         # Test Clear Done
         task.do_clear_done()
         self.assertEqual(task.active, False)
-
-    def test_record_rule(self):
-        "Test per user record rules"
-        Todo = self.env['todo.task']
-        task = Todo.sudo().create({'name': 'Admin Task'})
-        with self.assertRaises(AccessError):
-            Todo.browse([task.id]).name
