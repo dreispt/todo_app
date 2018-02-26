@@ -6,5 +6,12 @@
     'data': [
         # Ch04 Models
         'security/ir.model.access.csv',
+        # Ch05 data Files
+        'views/todo_menu.xml',
+    ],
+    # Ch05 Demo Data
+    'demo': [
+        'data/todo.task.csv',
+        'data/todo_task.xml',
     ],
 }
