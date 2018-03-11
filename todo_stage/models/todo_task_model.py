@@ -108,3 +108,18 @@ class TodoTask(models.Model):
     user_todo_count = fields.Integer(
         'User To-Do Count',
         compute='_compute_user_todo_count')
+
+    # Ch10 Kanban Views
+    color = fields.Integer('Color Index')
+    priority = fields.Selection(
+        [('0', 'Low'),
+         ('1', 'Normal'),
+         ('2', 'High')],
+        'Priority',
+        default='1')
+    kanban_state = fields.Selection(
+        [('normal', 'In Progress'),
+         ('blocked', 'Blocked'),
+         ('done', 'Ready for next stage')],
+        'Kanban State',
+        default='normal')
