@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="menu_todo" model="website.menu">
+      <field name="name">Todo</field>
+      <field name="url">/todos</field>
+      <field name="parent_id" ref="website.main_menu"/>
+      <field name="sequence" type="int">50</field>
+    </record>
+
+    <record id="todo_app.model_todo_task" model="ir.model">
+      <field name="website_form_access">True</field>
+      <field name="website_form_label">Add a To-Do</field>
+    </record>
+
+    <function model="ir.model.fields" name="formbuilder_whitelist">
+      <value>todo.task</value>
+      <value eval="[
+        'name',
+        'user_id',
+        'date_deadline',
+      ]"/>
+    </function>
+
+</odoo>
