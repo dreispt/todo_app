@@ -8,6 +8,8 @@
         'security/ir.model.access.csv',
         # Ch05 data Files
         'views/todo_menu.xml',
+        # Ch09 Views
+        'views/todo_view.xml',
     ],
     # Ch05 Demo Data
     'demo': [

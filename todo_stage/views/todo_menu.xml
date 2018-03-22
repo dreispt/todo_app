@@ -7,4 +7,49 @@
     </field>
 </record>
 
+
+<!-- Ch09 Backend Views -->
+<!-- Actions for the menu items -->
+<act_window id="action_todo_stage"
+    name="To-Do Task Stages"
+    res_model="todo.task.stage"
+    view_mode="tree,form"
+    target="current"
+    context="{'default_state': 'open'}"
+    domain="[]"
+    limit="80" />
+
+<!-- Menu items -->
+<!-- Overwrite the top menu item to remove Action -->
+<menuitem id="todo_app.menu_todo_task"
+    name="To-Do"
+    action="" />
+
+<!-- Second level menu items -->
+<menuitem id="menu_todo_task_view"
+    name="Tasks"
+    sequence="10"
+    parent="todo_app.menu_todo_task"
+    action="todo_app.action_todo_task" />
+
+<menuitem id="menu_todo_config"
+    name="Configuration"
+    sequence="100"
+    parent="todo_app.menu_todo_task"
+    groups="base.group_system" />
+
+<!-- Third level menu items -->
+  <menuitem id="menu_todo_task_stage"
+      name="Stages"
+      parent="menu_todo_config"
+      action="action_todo_stage" />
+
+<!-- Modify the view_mode of the To-Do Task Action -->
+<record id="todo_app.action_todo_task"
+        model="ir.actions.act_window">
+    <field name="view_mode"
+    >tree,form,calendar,graph,pivot</field>
+</record>
+
+
 </odoo>
