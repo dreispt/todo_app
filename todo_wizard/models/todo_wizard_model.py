@@ -66,7 +66,7 @@ class TodoWizard(models.TransientModel):
         if self.new_deadline:
             vals['date_deadline'] = self.new_deadline
         if self.new_user_id:
-            vals['user_id'] = self.new_user_id
+            vals['user_id'] = self.new_user_id.id
         # Mass write values on all selected tasks
         if vals:
             self.task_ids.write(vals)
